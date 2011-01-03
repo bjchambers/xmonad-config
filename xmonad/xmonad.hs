@@ -20,7 +20,7 @@ import qualified Data.Map        as M
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 --
-myTerminal      = "gnome-terminal"
+myTerminal      = "urxvtcd -sr"
  
 -- Width of the window border in pixels.
 --
@@ -57,7 +57,7 @@ myNumlockMask   = mod2Mask
 --
 -- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
 --
-myWorkspaces    = ["1:code","2:web","3:msg","4:vm","5:media","6","7","8","9"]
+myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]
  
 -- Border colors for unfocused and focused windows, respectively.
 --
@@ -72,14 +72,11 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     -- launch a terminal
     [ ((modMask .|. shiftMask, xK_Return), spawn $ XMonad.terminal conf)
 
-    -- launch gmrun
+    -- lock the screen
     , ((modMask .|. controlMask, xK_l     ), spawn "xscreensaver-command -lock")
 
     -- launch dmenu
     , ((modMask,               xK_p     ), spawn "exe=`dmenu_path | ~/bin/dmenu` && eval \"exec $exe\"")
- 
-    -- launch gmrun
-    , ((modMask .|. shiftMask, xK_p     ), spawn "gmrun")
  
     -- close focused window 
     , ((modMask .|. shiftMask, xK_c     ), kill)
@@ -229,24 +226,24 @@ myManageHook = composeAll
     , className =? "Galculator"     --> doFloat
     , resource  =? "Komodo_find2"   --> doFloat
     , resource  =? "compose"        --> doFloat
-    , className =? "Terminal"       --> doShift "1:code"
-    , className =? "Gedit"          --> doShift "1:code"
-    , className =? "Emacs"          --> doShift "1:code"
-    , className =? "Komodo Edit"    --> doShift "1:code"
-    , className =? "Emacs"          --> doShift "1:code"
-    , className =? "Google-chrome"  --> doShift "2:web"
-    , className =? "Thunderbird-bin" --> doShift "3:msg"
-    , className =? "Pidgin"         --> doShift "3:msg"
-    , className =? "VirtualBox"     --> doShift "4:vm"
-    , className =? "banshee-1"      --> doShift "5:media"
-    , className =? "Ktorrent"       --> doShift "5:media"
-    , className =? "Xchat"          --> doShift "5:media"
+    --, className =? "Terminal"       --> doShift "1:code"
+    --, className =? "Gedit"          --> doShift "1:code"
+    --, className =? "Emacs"          --> doShift "1:code"
+    --, className =? "Komodo Edit"    --> doShift "1:code"
+    --, className =? "Emacs"          --> doShift "1:code"
+    --, className =? "Google-chrome"  --> doShift "2:web"
+    --, className =? "Thunderbird-bin" --> doShift "3:msg"
+    --, className =? "Pidgin"         --> doShift "3:msg"
+    --, className =? "VirtualBox"     --> doShift "4:vm"
+    --, className =? "banshee-1"      --> doShift "5:media"
+    --, className =? "Ktorrent"       --> doShift "5:media"
+    --, className =? "Xchat"          --> doShift "5:media"
     , resource  =? "desktop_window" --> doIgnore
     , resource  =? "kdesktop"       --> doIgnore ]
  
 -- Whether focus follows the mouse pointer.
 myFocusFollowsMouse :: Bool
-myFocusFollowsMouse = True
+myFocusFollowsMouse = False
  
  
 ------------------------------------------------------------------------
@@ -278,15 +275,15 @@ myStartupHook = return ()
 main = do
 	xmproc <- spawnPipe "/usr/bin/xmobar ~/.xmonad/xmobar"
 	xmonad $ defaults {
-		logHook            = dynamicLogWithPP $ xmobarPP {
-                                ppOutput = hPutStrLn xmproc
-                                , ppTitle = xmobarColor "#FFB6B0" "" . shorten 100
-                                , ppCurrent = xmobarColor "#CEFFAC" ""
-                                , ppSep = "   "
-                                }
-		, manageHook = manageDocks <+> myManageHook
-		, startupHook = setWMName "LG3D"
-	}
+            logHook = dynamicLogWithPP $ xmobarPP {
+                ppOutput = hPutStrLn xmproc
+                , ppTitle = xmobarColor "#FFB6B0" "" . shorten 100
+                , ppCurrent = xmobarColor "#CEFFAC" ""
+                , ppSep = "   "
+            }
+            , manageHook = manageDocks <+> myManageHook
+            , startupHook = setWMName "LG3D"
+        }
  
 -- A structure containing your configuration settings, overriding
 -- fields in the default config. Any you don't override, will 
@@ -295,22 +292,22 @@ main = do
 -- No need to modify this.
 --
 defaults = defaultConfig {
-      -- simple stuff
-        terminal           = myTerminal,
-        focusFollowsMouse  = myFocusFollowsMouse,
-        borderWidth        = myBorderWidth,
-        modMask            = myModMask,
-        numlockMask        = myNumlockMask,
-        workspaces         = myWorkspaces,
-        normalBorderColor  = myNormalBorderColor,
-        focusedBorderColor = myFocusedBorderColor,
+    -- simple stuff
+    terminal           = myTerminal,
+    focusFollowsMouse  = myFocusFollowsMouse,
+    borderWidth        = myBorderWidth,
+    modMask            = myModMask,
+    numlockMask        = myNumlockMask,
+    workspaces         = myWorkspaces,
+    normalBorderColor  = myNormalBorderColor,
+    focusedBorderColor = myFocusedBorderColor,
  
-      -- key bindings
-        keys               = myKeys,
-        mouseBindings      = myMouseBindings,
+    -- key bindings
+    keys               = myKeys,
+    mouseBindings      = myMouseBindings,
  
-      -- hooks, layouts
-        layoutHook         = smartBorders $ myLayout,
-        manageHook         = myManageHook,
-        startupHook        = myStartupHook
-    }
+    -- hooks, layouts
+    layoutHook         = smartBorders $ myLayout,
+    manageHook         = myManageHook,
+    startupHook        = myStartupHook
+}
