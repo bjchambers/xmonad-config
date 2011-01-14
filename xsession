@@ -5,7 +5,6 @@ xrdb -merge ~/.Xresources
 
 (sleep 1; urxvtd) &
 (sleep 1; syndaemon -K -t -i 0.5) &
-(sleep 1; emacs --daemon) &
 
 (sleep 2; xscreensaver -no-splash) &
 exec xmonad
