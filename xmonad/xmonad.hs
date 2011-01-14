@@ -20,7 +20,7 @@ import qualified Data.Map        as M
 -- The preferred terminal program, which is used in a binding below and by
 -- certain contrib modules.
 --
-myTerminal      = "urxvtcd -sr"
+myTerminal      = "urxvtc -sr"
  
 -- Width of the window border in pixels.
 --
@@ -31,7 +31,7 @@ myBorderWidth   = 1
 -- ("right alt"), which does not conflict with emacs keybindings. The
 -- "windows key" is usually mod4Mask.
 --
-myModMask       = mod1Mask
+myModMask       = mod3Mask
  
 -- The mask for the numlock key. Numlock status is "masked" from the
 -- current modifier status, so the keybindings will work with numlock on or
@@ -57,7 +57,7 @@ myNumlockMask   = mod2Mask
 --
 -- > workspaces = ["web", "irc", "code" ] ++ map show [4..9]
 --
-myWorkspaces    = ["1","2","3","4","5","6","7","8","9"]
+myWorkspaces    = ["1:code","2:web","3","4","5","6","7","8","9"]
  
 -- Border colors for unfocused and focused windows, respectively.
 --
@@ -81,7 +81,7 @@ myKeys conf@(XConfig {XMonad.modMask = modMask}) = M.fromList $
     -- close focused window 
     , ((modMask .|. shiftMask, xK_c     ), kill)
  
-     -- Rotate through the available layout algorithms
+    -- Rotate through the available layout algorithms
     , ((modMask,               xK_space ), sendMessage NextLayout)
  
     --  Reset the layouts on the current workspace to default
@@ -189,7 +189,7 @@ myTabConfig = defaultTheme {   activeBorderColor = "#7C7C7C"
                              , inactiveBorderColor = "#7C7C7C"
                              , inactiveTextColor = "#EEEEEE"
                              , inactiveColor = "#000000" }
-myLayout = avoidStruts (tiled ||| Mirror tiled ||| tabbed shrinkText myTabConfig ||| Full ||| spiral (6/7))
+myLayout = avoidStruts (tiled ||| Mirror tiled ||| Full ||| spiral (6/7))
   where
      -- default tiling algorithm partitions the screen into two panes
      tiled   = Tall nmaster delta ratio
@@ -218,28 +218,10 @@ myLayout = avoidStruts (tiled ||| Mirror tiled ||| tabbed shrinkText myTabConfig
 -- To match on the WM_NAME, you can use 'title' in the same way that
 -- 'className' and 'resource' are used below.
 --
+-- Eg: doIgnore, doFloat, doShift "1:code"
 myManageHook = composeAll
-    [ className =? "MPlayer"        --> doFloat
-    , className =? "Smplayer"       --> doFloat
-    , className =? "Psx.real"       --> doFloat
-    , className =? "Gimp"           --> doFloat
-    , className =? "Galculator"     --> doFloat
-    , resource  =? "Komodo_find2"   --> doFloat
-    , resource  =? "compose"        --> doFloat
-    --, className =? "Terminal"       --> doShift "1:code"
-    --, className =? "Gedit"          --> doShift "1:code"
-    --, className =? "Emacs"          --> doShift "1:code"
-    --, className =? "Komodo Edit"    --> doShift "1:code"
-    --, className =? "Emacs"          --> doShift "1:code"
-    --, className =? "Google-chrome"  --> doShift "2:web"
-    --, className =? "Thunderbird-bin" --> doShift "3:msg"
-    --, className =? "Pidgin"         --> doShift "3:msg"
-    --, className =? "VirtualBox"     --> doShift "4:vm"
-    --, className =? "banshee-1"      --> doShift "5:media"
-    --, className =? "Ktorrent"       --> doShift "5:media"
-    --, className =? "Xchat"          --> doShift "5:media"
-    , resource  =? "desktop_window" --> doIgnore
-    , resource  =? "kdesktop"       --> doIgnore ]
+    [ 
+    ]
  
 -- Whether focus follows the mouse pointer.
 myFocusFollowsMouse :: Bool

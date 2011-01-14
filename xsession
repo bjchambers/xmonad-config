@@ -1,9 +1,11 @@
-xmodmap ~/.Xmodmap
+xrdb -merge ~/.Xresources
 
-(sleep 2; ~/bin/tray) &
-(sleep 2; wicd-gtk) &
+#~/bin/tray &
+#wicd-gtk &
 
-# No rush to start xscreensaver, wait a little while for the more important
-# things to get processed.
-(sleep 5; xscreensaver -no-splash) &
+(sleep 1; urxvtd) &
+(sleep 1; syndaemon -K -t -i 0.5) &
+(sleep 1; emacs --daemon) &
+
+(sleep 2; xscreensaver -no-splash) &
 exec xmonad
